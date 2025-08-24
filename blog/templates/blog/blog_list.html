@@ -1,5 +1,3 @@
-
-
 {% extends "base.html" %}
 {% block title %}Blog Posts{% endblock %}
 
@@ -7,7 +5,10 @@
 <div class="container mt-5">
     <h2 class="mb-4">Blog Posts</h2>
 
-    <a href="{% url 'blog_create' %}" class="btn btn-primary mb-3">+ Create New Blog</a>
+    <a href="{% url 'blog:blog_create' %}" class="btn btn-primary mb-3">+ Create New Blog</a>
+    <a href="{% url 'blog:blog_list' %}" class="btn btn-secondary">Back to List</a>
+<a href="{% url 'blog:blog_create' %}" class="btn btn-primary mb-3">+ Create New Blog</a>
+
 
     {% if posts %}
         <div class="row">
@@ -20,11 +21,9 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ post.title }}</h5>
                             <p class="card-text">{{ post.body|truncatechars:120 }}</p>
-                            {% if post.slug %}
-                                <a href="{% url 'blog_detail' post.slug %}" class="btn btn-outline-primary btn-sm">Read More</a>
-                                <a href="{% url 'blog_update' post.slug %}" class="btn btn-outline-warning btn-sm">Edit</a>
-                                <a href="{% url 'blog_delete' post.slug %}" class="btn btn-outline-danger btn-sm">Delete</a>
-                            {% endif %}
+                            <a href="{% url 'blog:blog_detail' post.slug %}" class="btn btn-outline-primary btn-sm">Read More</a>
+                            <a href="{% url 'blog:blog_update' post.slug %}" class="btn btn-outline-warning btn-sm">Edit</a>
+                            <a href="{% url 'blog:blog_delete' post.slug %}" class="btn btn-outline-danger btn-sm">Delete</a>
                         </div>
                         <div class="card-footer text-muted">
                             {{ post.published_date|date:"F d, Y" }}
@@ -38,4 +37,5 @@
     {% endif %}
 </div>
 {% endblock %}
+
 

@@ -1,11 +1,10 @@
-
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-# Category model
+# -------------------- CATEGORY --------------------
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
@@ -21,7 +20,8 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-# Product model
+
+# -------------------- PRODUCT --------------------
 status_choices = [
     ("in_stock", "In Stock"),
     ("out_of_stock", "Out of Stock"),
@@ -29,23 +29,21 @@ status_choices = [
 ]
 
 class Product(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products"  )
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products")
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField()
     image = models.ImageField(upload_to="products/")
     active = models.BooleanField(default=True)
-    description = models.TextField(max_length=1000, blank=True )
+    description = models.TextField(max_length=1000, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    is_featured = models.BooleanField(default=False)  
-
-
+    is_featured = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
-    
 
-# Order model
+
+# -------------------- ORDER --------------------
 class Order(models.Model):
     STATUS_CHOICES = [
         ("pending", "Pending"),
@@ -54,7 +52,13 @@ class Order(models.Model):
         ("cancelled", "Cancelled"),
     ]
 
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(
+        User, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True,
+        related_name='store_orders'  # <-- add this to avoid clash
+    )
     full_name = models.CharField(max_length=255)
     email = models.EmailField()
     address = models.TextField()
@@ -67,13 +71,23 @@ class Order(models.Model):
         return f"Order #{self.id} by {self.full_name}"
 
 
-# Optional: OrderItem model to store products in an order
+# -------------------- ORDER ITEM --------------------
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    order = models.ForeignKey(
+        Order, 
+        on_delete=models.CASCADE, 
+        related_name="items"
+    )
+    product = models.ForeignKey(
+        Product, 
+        on_delete=models.SET_NULL, 
+        null=True,
+        related_name='store_order_items'  # <-- add this to avoid clash
+    )
     quantity = models.PositiveIntegerField(default=1)
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return f"{self.quantity} x {self.product.name}"
-
+        if self.product:
+            return f"{self.quantity} x {self.product.name}"
+        return f"{self.quantity} x [Deleted Product]"
