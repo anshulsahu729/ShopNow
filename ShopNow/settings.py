@@ -30,12 +30,13 @@ INSTALLED_APPS = [
     'store',
     
     'cart',
+    'checkout',
     # Local apps
     'accounts',
     'blog',
     'dashboard',
     'newsletter',
-    'widget_tweaks',
+    'payment',
 ]
 
 MIDDLEWARE = [
@@ -115,6 +116,11 @@ LOGIN_REDIRECT_URL = "/dashboard/"  # will route by role
 LOGOUT_REDIRECT_URL = "/"
 
 LOGIN_URL = "/accounts/login/"   # redirect here if not logged in
+
+# Razorpay API Keys
+RAZORPAY_KEY_ID = "rzp_test_YourTestKeyID"
+RAZORPAY_KEY_SECRET = "YourTestKeySecret"
+
 
 
 

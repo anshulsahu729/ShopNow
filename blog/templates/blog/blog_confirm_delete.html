@@ -1,18 +1,21 @@
-
-
 {% extends "base.html" %}
 {% block title %}Delete Blog{% endblock %}
 
 {% block content %}
+<a href="{% url 'blog:blog_detail' post.slug %}" class="btn btn-outline-primary btn-sm">Read More</a>
+<a href="{% url 'blog:blog_update' post.slug %}" class="btn btn-outline-warning btn-sm">Edit</a>
+<a href="{% url 'blog:blog_delete' post.slug %}" class="btn btn-outline-danger btn-sm">Delete</a>
+
 <div class="container mt-5 text-center">
     <div class="card shadow-lg p-4">
         <h3>Are you sure you want to delete <strong>"{{ post.title }}"</strong>?</h3>
         <form method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">Yes, Delete</button>
-            <a href="{% url 'blog_detail' post.slug %}" class="btn btn-secondary">Cancel</a>
+            <a href="{% url 'blog:blog_detail' post.slug %}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </div>
 {% endblock %}
+
 
