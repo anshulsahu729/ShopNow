@@ -98,8 +98,13 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+<<<<<<< HEAD
 
 # Custom User Model
+=======
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+>>>>>>> bde541a3eac834c2416b6f7a3c13774424a508cf
 AUTH_USER_MODEL = "accounts.CustomUser"
 
 # Login / Logout redirects
