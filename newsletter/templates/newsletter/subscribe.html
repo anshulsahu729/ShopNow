@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Subscribe to Newsletter{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Subscribe to our Newsletter</h2>
+    <form method="post" class="mb-3">
+        {% csrf_token %}
+        {{ form.email }}
+        <button type="submit" class="btn btn-primary">Subscribe</button>
+    </form>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-info">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <h3 class="mt-5">All Subscribers</h3>
+    <ul class="list-group">
+        {% for subscriber in subscribers %}
+            <li class="list-group-item">{{ subscriber.email }} - {{ subscriber.subscribed_on|date:"F d, Y H:i" }}</li>
+        {% empty %}
+            <li class="list-group-item">No subscribers yet.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
