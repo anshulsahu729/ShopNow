@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'blog',
     'dashboard',
     'newsletter',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
