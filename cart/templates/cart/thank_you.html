@@ -3,8 +3,55 @@
 
 {% block content %}
 <div class="container mt-5 text-center">
-    <h2>Thank You for Your Purchase!</h2>
-    <p>Your order has been successfully placed.</p>
-    <a href="{% url 'shop_home' %}" class="btn btn-primary mt-3">Continue Shopping</a>
+    <h2 class="mb-3 animate__animated animate__zoomIn" style="color:#ff4d6d;">🎉 Thank You for Your Purchase!</h2>
+    <p class="lead animate__animated animate__fadeIn">Your order has been successfully placed.</p>
+    <a href="{% url 'shop_home' %}" class="btn btn-primary btn-lg mt-3 animate__animated animate__bounce">Continue Shopping</a>
 </div>
+
+<!-- Confetti Animation -->
+<canvas id="confettiCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const canvas = document.getElementById('confettiCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const confetti = [];
+for(let i=0;i<150;i++){
+    confetti.push({
+        x: Math.random()*canvas.width,
+        y: Math.random()*canvas.height,
+        r: Math.random()*6+4,
+        d: Math.random()*150+50,
+        color:`hsl(${Math.random()*360},100%,50%)`,
+        tilt:Math.floor(Math.random()*10)-10
+    });
+}
+
+function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    confetti.forEach(f=>{
+        ctx.beginPath();
+        ctx.lineWidth = f.r/2;
+        ctx.strokeStyle = f.color;
+        ctx.moveTo(f.x+f.tilt+f.r/2,f.y);
+        ctx.lineTo(f.x+f.tilt,f.y+f.r);
+        ctx.stroke();
+    });
+    update();
+    requestAnimationFrame(draw);
+}
+function update(){
+    confetti.forEach(f=>{
+        f.y += 2;
+        f.x += Math.sin(f.d)*0.5;
+        if(f.y>canvas.height){ f.y=0; f.x=Math.random()*canvas.width; }
+    });
+}
+draw();
+window.addEventListener('resize',()=>{canvas.width=window.innerWidth; canvas.height=window.innerHeight;});
+</script>
 {% endblock %}

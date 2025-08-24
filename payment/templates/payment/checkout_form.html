@@ -1,18 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Checkout Form</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <title>Checkout Form</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 flex justify-center items-center min-h-screen">
-    <div class="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md">
-        <h2 class="text-2xl font-bold mb-6 text-center">Place Your Order</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg mt-4 hover:bg-blue-700 transition">Place Order</button>
-        </form>
-    </div>
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500">
+  <div class="bg-white/20 backdrop-blur-lg p-8 rounded-2xl shadow-2xl w-full max-w-lg border border-white/30">
+    <h2 class="text-3xl font-extrabold text-center text-white mb-8 drop-shadow">💳 Secure Checkout</h2>
+    
+    <form method="post" class="space-y-6">
+      {% csrf_token %}
+      <!-- Render Django form -->
+      <div class="space-y-4 text-white">
+        {{ form.as_p }}
+      </div>
+      
+      <!-- Submit button -->
+      <button type="submit" 
+        class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg text-lg font-semibold tracking-wide shadow-md transform transition hover:scale-105 hover:shadow-xl">
+        Place Order
+      </button>
+    </form>
+  </div>
 </body>
 </html>

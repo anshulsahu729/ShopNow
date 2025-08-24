@@ -6,7 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 
 
-
+def home(request):
+    return render(request, "store/home.html")
 
 
 # -------------------- CATEGORY --------------------

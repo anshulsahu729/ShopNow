@@ -3,26 +3,35 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2>Checkout</h2>
+    <h2 class="mb-4 text-center" style="color:#28a745;">💳 Checkout</h2>
+
     {% if cart.items.all %}
-        <ul class="list-group mb-3">
+        <ul class="list-group mb-4 shadow-sm">
             {% for item in cart.items.all %}
-                <li class="list-group-item d-flex justify-content-between">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
                     {{ item.product.name }} (x{{ item.quantity }})
-                    <span>{{ item.total_price }}</span>
+                    <span class="fw-bold">${{ item.total_price }}</span>
                 </li>
             {% endfor %}
-            <li class="list-group-item d-flex justify-content-between">
+            <li class="list-group-item d-flex justify-content-between align-items-center" style="background:#e9f7ef;">
                 <strong>Total</strong>
-                <strong>{{ cart.total_price }}</strong>
+                <strong>${{ cart.total_price }}</strong>
             </li>
         </ul>
-        <form method="post">
+
+        <form method="post" class="text-center">
             {% csrf_token %}
-            <button class="btn btn-success">Pay & Complete Order</button>
+            <button class="btn btn-success btn-lg animate__animated animate__pulse animate__infinite">Pay & Complete Order</button>
         </form>
     {% else %}
-        <p>Your cart is empty.</p>
+        <p class="text-center text-muted mt-4">Your cart is empty.</p>
+        <div class="text-center mt-3">
+            <a href="{% url 'shop_home' %}" class="btn btn-primary btn-lg animate__animated animate__bounce">Continue Shopping</a>
+        </div>
     {% endif %}
 </div>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 {% endblock %}
