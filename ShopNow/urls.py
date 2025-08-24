@@ -6,8 +6,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('blog/', include('blog.urls')),
-    path('cart/', include('cart.urls')),
     path('dashboard/', include('dashboard.urls')),
     path('newsletter/', include('newsletter.urls')),
     path('store/', include('store.urls')),
+    
 ]
