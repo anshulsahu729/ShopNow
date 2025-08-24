@@ -27,7 +27,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'store',
+    
+    'cart',
     # Local apps
     'accounts',
     'blog',
@@ -98,13 +100,13 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-<<<<<<< HEAD
+# <<<<<<< HEAD
 
 # Custom User Model
-=======
+# =======
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
->>>>>>> bde541a3eac834c2416b6f7a3c13774424a508cf
+# >>>>>>> bde541a3eac834c2416b6f7a3c13774424a508cf
 AUTH_USER_MODEL = "accounts.CustomUser"
 
 # Login / Logout redirects

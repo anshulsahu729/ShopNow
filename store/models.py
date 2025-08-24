@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
@@ -77,4 +76,4 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.product.name}"
->>>>>>> bde541a3eac834c2416b6f7a3c13774424a508cf
+

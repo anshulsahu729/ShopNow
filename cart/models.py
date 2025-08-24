@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from store.models import Product  # Assuming your Product model is in store app
+from store.models import Product
 
 User = get_user_model()
 

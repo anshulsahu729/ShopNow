@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # dashboard/views.py
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView
@@ -8,7 +8,7 @@ class ProductDeleteView(DeleteView):
     model = Product
     template_name = "dashboard/products/product_confirm_delete.html"
     success_url = reverse_lazy("dashboard:product-list")
-=======
+
 # from django.shortcuts import render, get_object_or_404, redirect
 # from .models import BlogPost
 # from .forms import BlogPostForm
@@ -45,7 +45,7 @@ class ProductDeleteView(DeleteView):
 #         form = BlogPostForm(request.POST, request.FILES, instance=post)
 #         if form.is_valid():
 #             form.save()
-#             return redirect('blog_detail', slug=post.slug)  # ✅ fixed
+#             return redirect('blog_detail', slug=post.slug)  #
 #     else:
 #         form = BlogPostForm(instance=post)
 #     return render(request, 'blog/blog_form.html', {'form': form, 'title': 'Edit Blog'})
@@ -58,7 +58,7 @@ class ProductDeleteView(DeleteView):
 #     if request.method == 'POST':
 #         post.delete()
 #         return redirect('blog_list')
-#     # 👇 FIX: render blog_confirm_delete.html (not detail.html)
+#     #  FIX: render blog_confirm_delete.html (not detail.html)
 #     return render(request, 'blog/blog_confirm_delete.html', {'post': post})
 
 
@@ -102,4 +102,4 @@ def blog_delete(request, slug):
         return redirect('blog_list')
     return render(request, 'blog/blog_confirm_delete.html', {'post': post})
 
->>>>>>> bde541a3eac834c2416b6f7a3c13774424a508cf
+

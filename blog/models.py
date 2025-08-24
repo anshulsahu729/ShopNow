@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # blog/models.py
 from django.db import models
 from django.utils.text import slugify
@@ -22,7 +22,7 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
-=======
+
 # from django.db import models
 # from django.utils.text import slugify
 # from django.utils import timezone
@@ -67,4 +67,4 @@ class BlogPost(models.Model):
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
->>>>>>> bde541a3eac834c2416b6f7a3c13774424a508cf
+
