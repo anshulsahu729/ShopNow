@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 mb-4">
+            <div class="list-group shadow-lg rounded-3">
+                <a href="{% url 'store:category_list' %}" class="list-group-item list-group-item-action">
+                    📂 Categories
+                </a>
+                <a href="{% url 'store:product_list' %}" class="list-group-item list-group-item-action">
+                    🛒 Products
+                </a>
+                <a href="{% url 'store:order_list' %}" class="list-group-item list-group-item-action">
+                    📦 Orders
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div class="col-md-9 col-lg-10">
+            <h2 class="mb-4 text-primary fw-bold">📊 Admin Dashboard</h2>
+
+            <!-- Stats Cards -->
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card text-bg-primary shadow-lg rounded-4">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">📂 Categories</h5>
+                            <p class="card-text fs-3 fw-bold">{{ category_count }}</p>
+                            <a href="{% url 'store:category_list' %}" class="btn btn-light btn-sm rounded-pill">
+                                Manage Categories
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card text-bg-success shadow-lg rounded-4">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">🛒 Products</h5>
+                            <p class="card-text fs-3 fw-bold">{{ product_count }}</p>
+                            <a href="{% url 'store:product_list' %}" class="btn btn-light btn-sm rounded-pill">
+                                Manage Products
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card text-bg-warning shadow-lg rounded-4">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">📦 Orders</h5>
+                            <p class="card-text fs-3 fw-bold">{{ order_count }}</p>
+                            <a href="{% url 'store:order_list' %}" class="btn btn-dark btn-sm rounded-pill">
+                                Manage Orders
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Orders Table -->
+            <div class="card mt-5 shadow-lg rounded-4">
+                <div class="card-header bg-dark text-white rounded-top-4">
+                    <h5 class="mb-0">📋 Recent Orders</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table align-middle table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Customer</th>
+                                    <th>Status</th>
+                                    <th>Total</th>
+                                    <th>Created</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in recent_orders %}
+                                <tr>
+                                    <td>{{ order.id }}</td>
+                                    <td>{{ order.customer }}</td>
+                                    <td>
+                                        {% if order.status == "Pending" %}
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        {% elif order.status == "Completed" %}
+                                            <span class="badge bg-success">Completed</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ order.status }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>₹{{ order.total }}</td>
+                                    <td>{{ order.created_at|date:"M d, Y" }}</td>
+                                    <td>
+                                        <a href="{% url 'store:order_edit' order.id %}" class="btn btn-sm btn-primary rounded-pill">✏️ Edit</a>
+                                        <a href="{% url 'store:order_delete' order.id %}" class="btn btn-sm btn-danger rounded-pill">🗑️ Delete</a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">No recent orders found.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

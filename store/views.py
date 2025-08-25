@@ -1,4 +1,4 @@
-from pyexpat.errors import messages
+from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Category, Product, Order
 from .forms import CategoryForm, ProductForm, OrderForm
@@ -6,8 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 
 
-def home(request):
-    return render(request, "store/home.html")
+
+
 
 
 # -------------------- CATEGORY --------------------
@@ -18,19 +18,20 @@ def category_list(request):
 
 def category_create(request):
     if request.method == "POST":
-        print(request.FILES)
         form = CategoryForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request, "Category created successfully!")
-            return redirect('store:category_list')  # Make sure this URL name exists
+            return redirect('store:category_list')  # Ensure this URL name exists
         else:
             messages.error(request, "Please correct the errors below.")
     else:
         form = CategoryForm()
     
-    return render(request, 'store/category_form.html', {'form': form, 'title': 'Create Category'})
-
+    return render(request, 'store/category_form.html', {
+        'form': form,
+        'title': 'Create Category'
+    })
 def category_update(request, pk):
     category = get_object_or_404(Category, pk=pk)
     if request.method == 'POST':
