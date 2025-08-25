@@ -3,26 +3,72 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2>Subscribe to our Newsletter</h2>
-    <form method="post" class="mb-3">
-        {% csrf_token %}
-        {{ form.email }}
-        <button type="submit" class="btn btn-primary">Subscribe</button>
-    </form>
+    <!-- Hero Section -->
+    <div class="text-center mb-5">
+        <h1 class="fw-bold display-5 text-primary">📧 Join Our Newsletter</h1>
+        <p class="lead text-muted">Stay updated with our latest products, offers, and news!</p>
+    </div>
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-info">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
+    <!-- Subscription Form Card -->
+    <div class="card shadow-lg border-0 mb-5 mx-auto" style="max-width: 600px;">
+        <div class="card-body p-4 p-md-5 bg-light rounded-4">
+            <h4 class="card-title fw-bold mb-4 text-center">Subscribe Now</h4>
 
-    <h3 class="mt-5">All Subscribers</h3>
-    <ul class="list-group">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post" class="row g-3 align-items-center">
+                {% csrf_token %}
+                <div class="col-12 col-md-9">
+                    {{ form.email }}
+                </div>
+                <div class="col-12 col-md-3 d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">
+                        Subscribe
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Subscribers List -->
+    <h3 class="mb-4 text-center fw-bold text-secondary">💌 Our Subscribers</h3>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {% for subscriber in subscribers %}
-            <li class="list-group-item">{{ subscriber.email }} - {{ subscriber.subscribed_on|date:"F d, Y H:i" }}</li>
+        <div class="col">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <span class="text-truncate fw-medium">{{ subscriber.email }}</span>
+                    <span class="badge bg-info text-dark">{{ subscriber.subscribed_on|date:"M d, Y H:i" }}</span>
+                </div>
+            </div>
+        </div>
         {% empty %}
-            <li class="list-group-item">No subscribers yet.</li>
+        <div class="col">
+            <div class="card shadow-sm h-100 border-0 text-center">
+                <div class="card-body">
+                    <p class="text-muted mb-0">No subscribers yet.</p>
+                </div>
+            </div>
+        </div>
         {% endfor %}
-    </ul>
+    </div>
 </div>
+
+<!-- Optional JavaScript Enhancements -->
+<script>
+    // Auto-dismiss alerts after 4 seconds
+    setTimeout(() => {
+        document.querySelectorAll('.alert').forEach(alert => {
+            alert.classList.remove('show');
+            alert.classList.add('hide');
+        });
+    }, 4000);
+</script>
 {% endblock %}

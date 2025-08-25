@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from store.models import Category, Product, Order
-
 from django.contrib import messages
+from newsletter.models import Subscriber
+
 
 def contact(request):
     if request.method == "POST":
@@ -16,12 +17,34 @@ def contact(request):
 
     return render(request, 'core/contact.html', {'title': 'Contact Us'})
 
-# Create your views here.
+
+
+
+
 def home(request):
-    categories = Category.objects.all()
-    products = Product.objects.all()
+    
+    if request.method == "POST":
+        email = request.POST.get('email')
+        if email:
+            subscriber, created = Subscriber.objects.get_or_create(email=email)
+            if created:
+                messages.success(request, "🎉 Thank you for subscribing!")
+            else:
+                messages.info(request, "You are already subscribed.")
+        else:
+            messages.error(request, "Please enter a valid email.")
+        return redirect('core:home')  # Replace 'home' with your homepage URL name
+    categories = Category.objects.all()[:4]
+    category_products = {}
+    for category in categories:
+        category_products[category] = Product.objects.filter(
+            category=category, active=True
+        )[:4]
+    products = Product.objects.filter(active=True)[:8]
+    
     context = {
-        'categories': categories,
-        'products': products
+        'category_products': category_products,
+        'products': products,
     }
+
     return render(request, 'core/home.html', context)
