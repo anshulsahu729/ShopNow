@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'newsletter',
     'payment',
     "widget_tweaks",
+    'core',
 ]
 
 MIDDLEWARE = [

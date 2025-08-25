@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+  <!-- Hero Section with Carousel -->
+  <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="{% static 'images/banner1.jpg' %}" class="d-block w-100" alt="Banner 1">
+        <div class="carousel-caption d-none d-md-block">
+          <h2 class="fw-bold text-shadow">Shop the Latest Trends 👗</h2>
+          <p>Discover fashion, electronics & more with amazing deals!</p>
+          <a href="#" class="btn btn-lg btn-primary shadow">Shop Now</a>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'images/banner2.jpg' %}" class="d-block w-100" alt="Banner 2">
+        <div class="carousel-caption d-none d-md-block">
+          <h2 class="fw-bold text-shadow">Electronics Sale ⚡</h2>
+          <p>Up to 50% off on gadgets and accessories!</p>
+          <a href="#" class="btn btn-lg btn-warning shadow">Explore</a>
+        </div>
+      </div>
+      <div class="carousel-item">
+  <img src="{% static 'images/banner3.jpg' %}" class="d-block w-100" alt="Banner 3">
+  <div class="carousel-caption d-none d-md-block">
+    <h2 class="fw-bold text-shadow">Fashion Trends 👗</h2>
+    <p>Stay stylish with the latest arrivals in clothing and accessories.</p>
+    <a href="#" class="btn btn-lg btn-primary shadow">Shop Now</a>
+  </div>
+</div>
+
+<div class="carousel-item">
+  <img src="{% static 'images/banner4.jpg' %}" class="d-block w-100" alt="Banner 4">
+  <div class="carousel-caption d-none d-md-block">
+    <h2 class="fw-bold text-shadow">Home & Lifestyle 🏡</h2>
+    <p>Upgrade your living space with our premium collection.</p>
+    <a href="#" class="btn btn-lg btn-success shadow">Discover</a>
+  </div>
+</div>
+
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="container my-4">
+    <div class="input-group shadow-sm">
+      <input id="searchInput" type="text" class="form-control" placeholder="Search for products 🔍...">
+      <button class="btn btn-dark">Search</button>
+    </div>
+  </div>
+
+  <!-- Featured Categories -->
+  <div class="container py-5">
+    <h2 class="text-center fw-bold mb-4">Shop by Categories 🛍️</h2>
+    <div class="row text-center">
+      <div class="col-md-3">
+        <div class="card shadow-lg border-0">
+          <div class="card-body">
+            <i class="bi bi-phone display-4 text-primary"></i>
+            <h5 class="card-title mt-2">Electronics</h5>
+            <a href="#" class="stretched-link"></a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card shadow-lg border-0">
+          <div class="card-body">
+            <i class="bi bi-bag-heart display-4 text-danger"></i>
+            <h5 class="card-title mt-2">Fashion</h5>
+            <a href="#" class="stretched-link"></a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card shadow-lg border-0">
+          <div class="card-body">
+            <i class="bi bi-house-door display-4 text-success"></i>
+            <h5 class="card-title mt-2">Home & Living</h5>
+            <a href="#" class="stretched-link"></a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card shadow-lg border-0">
+          <div class="card-body">
+            <i class="bi bi-controller display-4 text-warning"></i>
+            <h5 class="card-title mt-2">Gaming</h5>
+            <a href="#" class="stretched-link"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Section -->
+  <div class="container py-5">
+    <h2 class="text-center fw-bold mb-4">Featured Products ⭐</h2>
+    <div class="row" id="productList">
+      {% for product in products %}
+      <div class="col-md-3 mb-4 product-card">
+        <div class="card shadow h-100">
+          <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+          <div class="card-body text-center">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text text-muted">${{ product.price }}</p>
+            <a href="{% url 'product_detail' product.id %}" class="btn btn-outline-primary btn-sm">View</a>
+            <a href="{% url 'add_to_cart' product.id %}" class="btn btn-success btn-sm">Add to Cart 🛒</a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-center">No products available right now!</p>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+
+<!-- Scroll to Top Button -->
+<button id="scrollTopBtn" class="btn btn-dark rounded-circle shadow" style="position: fixed; bottom: 20px; right: 20px; display: none;">
+  ⬆️
+</button>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Auto carousel
+document.addEventListener("DOMContentLoaded", function () {
+  let carousel = document.querySelector('#heroCarousel');
+  let carouselInstance = new bootstrap.Carousel(carousel, { interval: 3000, ride: "carousel" });
+});
+
+// Search filter function
+document.getElementById("searchInput").addEventListener("keyup", function () {
+  let filter = this.value.toLowerCase();
+  let items = document.querySelectorAll(".product-card");
+  items.forEach(card => {
+    let title = card.querySelector(".card-title").innerText.toLowerCase();
+    card.style.display = title.includes(filter) ? "" : "none";
+  });
+});
+
+// Scroll to top button
+let scrollTopBtn = document.getElementById("scrollTopBtn");
+window.onscroll = function () {
+  scrollTopBtn.style.display = (document.documentElement.scrollTop > 200) ? "block" : "none";
+};
+scrollTopBtn.onclick = function () {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+</script>
+{% endblock %}
