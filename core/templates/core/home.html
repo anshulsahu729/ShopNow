@@ -109,7 +109,7 @@
   <div class="mb-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h3 class="fw-bold text-primary">{{ category.name }}</h3>
-      <a href="{#}" class="btn btn-outline-dark btn-sm rounded-pill">
+      <a href="{% url 'core:category_products' category.id %}" class="btn btn-outline-dark btn-sm rounded-pill">
         View All →
       </a>
     </div>
@@ -126,7 +126,7 @@
             <h5 class="card-title fw-bold">{{ product.name }}</h5>
             <p class="text-muted small mb-2">₹{{ product.price }}</p>
             <div class="d-flex justify-content-center gap-2">
-              <a href="{#}" class="btn btn-sm btn-primary rounded-pill">
+              <a href="{%url 'cart:cart_add' product.id%}" class="btn btn-sm btn-primary rounded-pill">
                 <i class="bi bi-cart-plus"></i> Add
               </a>
               <button class="btn btn-sm btn-outline-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#quickView{{ product.id }}">

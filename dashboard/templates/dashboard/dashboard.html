@@ -1,2 +1,91 @@
-<h1>Welcome to Admin Dashboard</h1>
-<p>You are logged in as {{ request.user.username }}</p>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar -->
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+      <div class="position-sticky pt-3 text-white">
+        <h4 class="px-3 py-2 border-bottom">👤 {{ user.name }}</h4>
+        <ul class="nav flex-column mt-3">
+          <li class="nav-item">
+            <a class="nav-link text-white active" href="#">
+              <i class="bi bi-house-door-fill"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="#">
+              <i class="bi bi-bag-check-fill"></i> Orders
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="#">
+              <i class="bi bi-heart-fill"></i> Wishlist
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="#">
+              <i class="bi bi-gear-fill"></i> Settings
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <!-- Topbar -->
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h2 class="h3">Welcome back, {{ user.name }} 👋</h2>
+        <a href="{% url 'accounts:logout' %}" class="btn btn-danger btn-sm">
+          <i class="bi bi-box-arrow-right"></i> Logout
+        </a>
+      </div>
+
+      <!-- Stats Section -->
+      <div class="row g-4 mb-4">
+        <div class="col-md-4">
+          <div class="card shadow-sm text-center p-3 bg-primary text-white">
+            <h4>🛍️ Total Orders</h4>
+            <h2>{{ total_orders }}</h2>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card shadow-sm text-center p-3 bg-success text-white">
+            <h4>✅ Completed</h4>
+            <h2>{{ completed_orders }}</h2>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card shadow-sm text-center p-3 bg-warning text-dark">
+            <h4>⏳ Pending</h4>
+            <h2>{{ pending_orders }}</h2>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Orders -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-dark text-white">
+          Recent Orders
+        </div>
+        <div class="card-body">
+          {% if recent_orders %}
+            <ul class="list-group">
+              {% for order in recent_orders %}
+                <li class="list-group-item">
+                  🆔 Order #{{ order.id }} - {{ order.status }} <br>
+                  <small class="text-muted">Placed on {{ order.created_at|date:"d M Y, H:i" }}</small>
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="text-muted">No recent orders found.</p>
+          {% endif %}
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+{% endblock %}

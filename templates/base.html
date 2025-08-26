@@ -26,7 +26,13 @@
                     <li class="nav-item"><a class="nav-link" href="{#}">Blog</a></li>
                     <li class="nav-item"><a class="nav-link" href="{#}">Shop</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'core:contact' %}">Contact</a></li>
-
+                        <!-- Login and Signup Buttons -->
+                        <li class="nav-item">
+                            <a class="btn btn-outline-light me-2" href="{% url 'accounts:login' %}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-primary" href="{% url 'accounts:signup' %}">Sign Up</a>
+                        </li>
                 </ul>
             </div>
         </div>

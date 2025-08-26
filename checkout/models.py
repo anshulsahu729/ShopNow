@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from store.models import Product  # Import Product directly
+from store.models import Product  # Ensure this path matches your project structure
 
 User = get_user_model()
 
@@ -20,11 +20,11 @@ class Order(models.Model):
 
     @property
     def total_price(self):
-        return sum(item.total_price for item in self.items.all())
+        return sum(item.total_price for item in self.order_items.all())
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)  # Directly reference Product
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
@@ -35,4 +35,3 @@ class OrderItem(models.Model):
         if self.product:
             return self.product.price * self.quantity
         return 0
-

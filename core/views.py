@@ -2,6 +2,9 @@ from django.shortcuts import render,redirect
 from store.models import Category, Product, Order
 from django.contrib import messages
 from newsletter.models import Subscriber
+from django.shortcuts import render, get_object_or_404
+from cart.models import Cart
+
 
 
 def contact(request):
@@ -48,3 +51,21 @@ def home(request):
     }
 
     return render(request, 'core/home.html', context)
+
+
+def product_list(request):
+    products = Product.objects.filter(active=True)
+    return render(request, 'core/product.html', {'products': products})
+
+
+
+def category_products(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    products = Product.objects.filter(category=category, active=True)
+
+    context = {
+        'category': category,
+        'products': products
+    }
+
+    return render(request, 'core/category_products.html', context)

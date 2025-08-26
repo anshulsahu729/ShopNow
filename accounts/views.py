@@ -1,51 +1,56 @@
-# accounts/views.py
-from django.contrib.auth import login, logout
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.urls import reverse
-from django.contrib import messages
+from django.contrib.auth import login, logout, authenticate, get_user_model
+from django.contrib.auth.decorators import login_required
+from .forms import SignupForm, LoginForm
 
-from .forms import CustomUserCreationForm
-from .models import Roles
+User = get_user_model()  # ✅ safely respects AUTH_USER_MODEL
 
 
-def register_view(request):
-    """Customer (default) registration form."""
+def user_list(request):
+    """ List all users (admin/demo purpose). """
+    users = User.objects.all()
+    return render(request, "accounts/user_list.html", {"users": users})
+
+
+def signup_view(request):
+    """ Handle user signup. """
     if request.method == "POST":
-        form = CustomUserCreationForm(request.POST)
+        form = SignupForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)  # auto login after signup
-            messages.success(request, "Account created successfully!")
-            return redirect("accounts:dashboard")
+            user = form.save(commit=False)
+            # ✅ Always hash password properly
+            raw_password = form.cleaned_data["password"]
+            user.set_password(raw_password)
+            user.save()
+            return redirect("accounts:login")  # after signup go to login
     else:
-        form = CustomUserCreationForm()
-    return render(request, "accounts/register.html", {"form": form})
+        form = SignupForm()
+    return render(request, "accounts/signup.html", {"form": form})
 
 
-@login_required
-def dashboard_view(request):
-    """Role-based dashboard routing."""
-    user = request.user
-    context = {"user": user}
+def login_view(request):
+    """ Handle user login. """
+    form = LoginForm(request.POST or None)
+    error = None
 
-    if user.role == Roles.CUSTOMER:
-        template = "accounts/dashboard_customer.html"
-    elif user.role == Roles.SELLER:
-        template = "accounts/dashboard_seller.html"
-    elif user.role == Roles.MANAGER:
-        template = "accounts/dashboard_manager.html"
-    elif user.role in [Roles.ADMIN, Roles.STAFF]:
-        template = "accounts/dashboard_admin.html"
-    else:
-        template = "accounts/dashboard_generic.html"
+    if request.method == "POST" and form.is_valid():
+        email = form.cleaned_data["email"]
+        password = form.cleaned_data["password"]
 
-    return render(request, template, context)
+        # ✅ authenticate() calls custom backends from AUTHENTICATION_BACKENDS
+        user = authenticate(request, username=email, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect("dashboard:dashboard")
+        else:
+            error = "Invalid email or password"
+
+    return render(request, "accounts/login.html", {"form": form, "error": error})
 
 
 @login_required
 def logout_view(request):
+    """ Handle user logout. """
     logout(request)
-    messages.info(request, "You have been logged out.")
-    return redirect(reverse("accounts:login"))
-
+    return redirect("accounts:login")

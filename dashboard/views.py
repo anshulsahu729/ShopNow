@@ -1,16 +1,16 @@
-# dashboard/views.py
-from django.shortcuts import redirect, render
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
+
 from store.models import Category, Product, Order
 
 
- # ✅ Only staff/admins can access
+
 def admin_dashboard(request):
     category_count = Category.objects.count()
     product_count = Product.objects.count()
     order_count = Order.objects.count()
 
-    # Get recent 5 orders
     recent_orders = Order.objects.order_by('-created_at')[:5]
 
     context = {
@@ -21,3 +21,7 @@ def admin_dashboard(request):
     }
     return render(request, 'dashboard/admin_dashboard.html', context)
 
+  # redirect to your login URL name
+def user_dashboard(request):
+    
+    return render(request, 'dashboard/dashboard.html')
