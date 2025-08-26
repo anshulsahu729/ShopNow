@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load widget_tweaks %}
 {% block title %}Login{% endblock %}
 
 {% block content %}
@@ -8,19 +8,22 @@
         <div class="card-body">
             <h2 class="text-center mb-4">Login</h2>
 
-            <form method="POST" novalidate>
+            <!-- Explicitly set the form action and method -->
+            <form method="POST" action="{% url 'accounts:login' %}" novalidate>
                 {% csrf_token %}
 
+                <!-- Display general error message if exists -->
                 {% if error %}
                     <div class="alert alert-danger text-center">
                         {{ error }}
                     </div>
                 {% endif %}
 
+                <!-- Loop through form fields -->
                 {% for field in form %}
                     <div class="mb-3">
                         {{ field.label_tag }}
-                        {{ field }}
+                        {{ field|add_class:"form-control" }}    
                         {% if field.errors %}
                             <div class="invalid-feedback d-block">
                                 {{ field.errors|striptags }}

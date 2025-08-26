@@ -1,5 +1,5 @@
 from django import forms
-from .models import User
+from .models import CustomUser as User
 
 
 class SignupForm(forms.ModelForm):
@@ -23,6 +23,14 @@ class SignupForm(forms.ModelForm):
         return cleaned_data
 
 
+
+
 class LoginForm(forms.Form):
-    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    email = forms.EmailField(
+        label="Email",
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter your email'})
+    )
+    password = forms.CharField(
+        label="Password",
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter your password'})
+    )

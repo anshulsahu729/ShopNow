@@ -12,9 +12,7 @@ def checkout_view(request):
     # Get the cart for the logged-in user
     cart = Cart.objects.filter(user=request.user).first()
 
-    # If no cart or empty cart
-    if not cart or not cart.items.exists():
-        return redirect('cart:cart_view')
+   
 
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
@@ -42,7 +40,7 @@ def checkout_view(request):
             return redirect('checkout:thank_you')
     else:
         form = CheckoutForm(initial={
-            'full_name': request.user.get_full_name() or request.user.username,
+            
             'email': request.user.email
         })
 

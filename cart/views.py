@@ -22,10 +22,10 @@ def cart_add(request, product_id):
     return redirect("cart:cart_detail")
 
 
-def cart_remove(request, product_id):
+def cart_remove(request, item_id):
     cart = request.session.get("cart", {})
-    if str(product_id) in cart:
-        del cart[str(product_id)]
+    if str(item_id) in cart:
+        del cart[str(item_id)]
         request.session["cart"] = cart
     return redirect("cart:cart_detail")
 

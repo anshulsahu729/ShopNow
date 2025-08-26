@@ -1,74 +1,43 @@
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
-import hashlib
-import datetime 
-from django.contrib.auth.models import AbstractUser, Group, Permission
 
 
-class UserManager(BaseUserManager):
-    def create_user(self, email, name, password=None):
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, name, password=None, **extra_fields):
         if not email:
             raise ValueError('Email is required')
         if not name:
             raise ValueError('Name is required')
 
-        user = self.model(
-            email=self.normalize_email(email),
-            name=name
-        )
-        user.set_password(password)
+        email = self.normalize_email(email)
+        user = self.model(email=email, name=name, **extra_fields)
+        user.set_password(password)   # ✅ uses Django’s built-in hashing
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, name, password=None):
-        user = self.create_user(email=email, name=name, password=password)
-        user.is_admin = True
-        user.save(using=self._db)
-        return user
+    def create_superuser(self, email, name, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
 
-class User(AbstractBaseUser):
-    name = models.CharField(max_length=255 ,default="Anonymous")  # ✅ Added name field
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+
+        return self.create_user(email, name, password, **extra_fields)
+
+
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    name = models.CharField(max_length=255, blank=True, null=True)
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
-    
+    is_staff = models.BooleanField(default=False)   # ✅ use is_staff
+    is_superuser = models.BooleanField(default=False)
+
+    objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name']  # ✅ Require name  for creates
-
-    objects = UserManager()
-
-    def set_password(self, raw_password):
-        self.password = hashlib.sha256(raw_password.encode()).hexdigest()
-
-    def check_password(self, raw_password):
-        return self.password == hashlib.sha256(raw_password.encode()).hexdigest()
+    REQUIRED_FIELDS = ['name']
 
     def __str__(self):
-        return self.name or self.email  # Show name if available
-
-    @property
-    def is_staff(self):
-        return self.is_admin
-class CustomUser(AbstractUser):
-    # Extra fields
-    phone_number = models.CharField(max_length=15, blank=True, null=True)
-
-    # Avoid reverse accessor clashes
-    groups = models.ManyToManyField(
-        Group,
-        related_name="customuser_set",  # change from default
-        blank=True,
-        help_text="The groups this user belongs to.",
-        verbose_name="groups",
-    )
-    user_permissions = models.ManyToManyField(
-        Permission,
-        related_name="customuser_set",  # change from default
-        blank=True,
-        help_text="Specific permissions for this user.",
-        verbose_name="user permissions",
-    )
-
-    def __str__(self):
-        return self.username
+        return self.name or self.email
