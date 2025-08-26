@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import CustomerOrderForm
 from .models import CustomerOrder
 
-def checkout_form_view(request):
+def checkout(request):
     if request.method == 'POST':
         form = CustomerOrderForm(request.POST)
         if form.is_valid():

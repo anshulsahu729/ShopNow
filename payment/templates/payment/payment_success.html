@@ -33,7 +33,7 @@
       <p class="text-sm text-gray-600 mt-3">Your order will be delivered on <strong>{{ order.delivery_date|date:"d M Y" }}</strong></p>
     </div>
 
-    <a href="{% url 'payment:checkout_form' %}" 
+    <a href="{% url 'core:home' %}" 
       class="mt-6 inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-8 rounded-xl shadow-md font-semibold tracking-wide transition transform hover:scale-105 hover:shadow-lg">
       Place Another Order
     </a>
